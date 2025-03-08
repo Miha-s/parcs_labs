@@ -53,11 +53,9 @@ public class QuickSort implements AM {
         int totalHits = 0;
         for (int i = 0; i < k; i++) {
             int newHints = ((int[]) channels[i].readObject())[0];
-            System.err.println(newHints);
             totalHits += newHints;
         }
         stopTimer();
-        System.err.println(totalHits);
 
         double estimatedPi = 4.0 * totalHits / (double) totalDarts;
         System.out.println("Estimated Pi: " + estimatedPi);
@@ -69,7 +67,7 @@ public class QuickSort implements AM {
         int[] dartsPerWorker = (int[]) info.parent.readObject();
         int[]hits = new int[1];
         hits[0] = estimateHits(dartsPerWorker[0]);
-        info.parent.write(new int[]{4});
+        info.parent.write(hits);
     }
 
     private int estimateHits(int dartsPerWorker) {
