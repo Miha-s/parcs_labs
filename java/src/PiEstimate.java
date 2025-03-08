@@ -1,4 +1,5 @@
-import java.util.Random;
+import java.io.*;
+import java.util.*;
 import parcs.*;
 
 public class PiEstimate implements AM {
@@ -24,9 +25,10 @@ public class PiEstimate implements AM {
 
         long totalDarts = Long.parseLong(args[0]);
         int k = Integer.parseInt(args[1]);
+        System.err.println("Here");
 
         task curtask = new task();
-        curtask.addJarFile("PiEstimate.jar"); // Add your jar file
+        curtask.addJarFile("PiEstimate.jar");
         AMInfo info = new AMInfo(curtask, null);
 
         System.err.println("Distributing work to workers...");
