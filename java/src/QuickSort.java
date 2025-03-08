@@ -54,6 +54,7 @@ public class QuickSort implements AM {
             totalHits += ((int[]) channels[i].readObject())[0];
         }
         stopTimer();
+        System.err.println(totalHits);
 
         double estimatedPi = 4.0 * totalHits / (double) totalDarts;
         System.out.println("Estimated Pi: " + estimatedPi);
