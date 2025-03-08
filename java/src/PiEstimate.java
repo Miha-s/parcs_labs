@@ -1,9 +1,9 @@
 import java.io.*;
 import java.util.*;
+
 import parcs.*;
 
-public class PiEstimate implements AM {
-
+public class QuickSort implements AM {
     private static long startTime = 0;
 
     public static void startTimer() {
@@ -18,63 +18,43 @@ public class PiEstimate implements AM {
     }
 
     public static void main(String[] args) throws Exception {
-        if (args.length != 2) {
-            System.err.println("Usage: PiEstimate <total-darts> <number-of-workers>");
+        if (args.length != 1) {
+            System.err.println("Usage: QuickSort <number-of-workers>");
             System.exit(1);
         }
-
-        long totalDarts = Long.parseLong(args[0]);
-        int k = Integer.parseInt(args[1]);
-        System.err.println("Here");
-
+        int k = Integer.parseInt(args[0]);
+    
         task curtask = new task();
-        curtask.addJarFile("PiEstimate.jar");
+        curtask.addJarFile("QuickSort.jar");
         AMInfo info = new AMInfo(curtask, null);
-
-        System.err.println("Distributing work to workers...");
+    
+        System.err.println("Forwarding parts to workers...");
         startTimer();
         channel[] channels = new channel[k];
-        long dartsPerWorker = totalDarts / k;
-
         for (int i = 0; i < k; i++) {
+            int[] part = [1, 2, 3];
             point p = info.createPoint();
             channel c = p.createChannel();
-            p.execute("PiEstimate");
-            c.write(dartsPerWorker);
+            p.execute("QuickSort");
+            c.write(part);
             channels[i] = c;
         }
         stopTimer();
-
-        System.err.println("Collecting results from workers...");
+    
+        System.err.println("Getting results from workers...");
         startTimer();
-        long totalHits = 0;
+        int[][] parts = new int[k][];
         for (int i = 0; i < k; i++) {
-            totalHits += (long) channels[i].readObject();
+            parts[i] = (int[]) channels[i].readObject();
         }
         stopTimer();
-
-        double estimatedPi = 4.0 * totalHits / (double) totalDarts;
-        System.out.println("Estimated Pi: " + estimatedPi);
-
+    
         curtask.end();
     }
 
-    public void run(AMInfo info) {
-        long dartsPerWorker = (long) info.parent.readObject();
-        long hits = estimateHits(dartsPerWorker);
-        info.parent.write(hits);
-    }
 
-    private long estimateHits(long dartsPerWorker) {
-        Random random = new Random();
-        long hits = 0;
-        for (long i = 0; i < dartsPerWorker; i++) {
-            double x = random.nextDouble() * 2 - 1;
-            double y = random.nextDouble() * 2 - 1;
-            if (x * x + y * y <= 1) {
-                hits++;
-            }
-        }
-        return hits;
+    public void run(AMInfo info) {
+        int[] arr = (int[])info.parent.readObject();
+
+        info.parent.write(arr);
     }
-}
