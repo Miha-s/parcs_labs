@@ -34,7 +34,7 @@ public class QuickSort implements AM {
         startTimer();
         channel[] channels = new channel[k];
         for (int i = 0; i < k; i++) {
-            int[] part = {1, 2, 34, 5, 6, 7, 8, 9, 10};
+            long[] part = {1, 2, 34, 5, 6, 7, 8, 9, 10};
             point p = info.createPoint();
             channel c = p.createChannel();
             p.execute("QuickSort");
@@ -45,9 +45,9 @@ public class QuickSort implements AM {
     
         System.err.println("Getting results from workers...");
         startTimer();
-        int[][] parts = new int[k][];
+        long[][] parts = new long[k][];
         for (int i = 0; i < k; i++) {
-            parts[i] = (int[]) channels[i].readObject();
+            parts[i] = (long[]) channels[i].readObject();
         }
         stopTimer();
 
@@ -57,7 +57,7 @@ public class QuickSort implements AM {
 
 
     public void run(AMInfo info) {
-        int[] arr = (int[])info.parent.readObject();
+        long[] arr = (long[])info.parent.readObject();
         info.parent.write(arr);
     }
 }
