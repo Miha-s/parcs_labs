@@ -23,7 +23,7 @@ public class QuickSort implements AM {
             System.exit(1);
         }
 
-        int totalDarts = Integer.parseint(args[0]);
+        int totalDarts = Integer.parseInt(args[0]);
         int k = Integer.parseInt(args[1]);
         System.err.println("Here");
 
