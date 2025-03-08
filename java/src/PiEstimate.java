@@ -58,3 +58,4 @@ public class QuickSort implements AM {
 
         info.parent.write(arr);
     }
+}
