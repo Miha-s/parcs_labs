@@ -116,9 +116,8 @@ public class QuickSort implements AM {
 
     public void run(AMInfo info) {
         int[] arr = (int[])info.parent.readObject();
-        arr[0] = 1;
-        // quickSort(arr, 0, arr.length - 1);
-        // info.parent.write(new int[]{1});
+        quickSort(arr, 0, arr.length - 1);
+        info.parent.write(new int[]{1});
     }
 
 }
