@@ -4,15 +4,15 @@ import parcs.*;
 
 public class QuickSort implements AM {
 
-    private static int startTime = 0;
+    private static long startTime = 0;
 
     public static void startTimer() {
         startTime = System.nanoTime();
     }
 
     public static void stopTimer() {
-        int endTime = System.nanoTime();
-        int timeElapsed = endTime - startTime;
+        long endTime = System.nanoTime();
+        long timeElapsed = endTime - startTime;
         double seconds = timeElapsed / 1_000_000_000.0;
         System.err.println("Time passed: " + seconds + " seconds.");
     }
