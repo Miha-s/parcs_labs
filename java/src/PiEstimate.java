@@ -32,7 +32,7 @@ public class QuickSort implements AM {
         startTimer();
         channel[] channels = new channel[k];
         for (int i = 0; i < k; i++) {
-            int[] part = [1, 2, 3];
+            int[] part = {1, 2, 3};
             point p = info.createPoint();
             channel c = p.createChannel();
             p.execute("QuickSort");
