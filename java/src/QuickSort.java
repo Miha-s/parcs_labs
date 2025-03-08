@@ -1,9 +1,9 @@
 import java.io.*;
 import java.util.*;
-
 import parcs.*;
 
 public class QuickSort implements AM {
+
     private static long startTime = 0;
 
     public static void startTimer() {
@@ -17,107 +17,71 @@ public class QuickSort implements AM {
         System.err.println("Time passed: " + seconds + " seconds.");
     }
 
-    public static void quickSort(int[] arr, int low, int high) {
-        if (low < high) {
-            int pivotIndex = partition(arr, low, high);
-            quickSort(arr, low, pivotIndex - 1);
-            quickSort(arr, pivotIndex + 1, high);
-        }
-    }
-
-    private static int partition(int[] arr, int low, int high) {
-        int pivot = arr[high];
-        int i = low - 1;
-        for (int j = low; j < high; j++) {
-            if (arr[j] < pivot) {
-                i++;
-                int temp = arr[i];
-                arr[i] = arr[j];
-                arr[j] = temp;
-            }
-        }
-        int temp = arr[i + 1];
-        arr[i + 1] = arr[high];
-        arr[high] = temp;
-        return i + 1;
-    }
-
     public static void main(String[] args) throws Exception {
-        if (args.length != 1) {
-            System.err.println("Usage: QuickSort <number-of-workers>");
+        if (args.length != 2) {
+            System.err.println("Usage: QuickSort <total-darts> <number-of-workers>");
             System.exit(1);
         }
-        int k = Integer.parseInt(args[0]);
-    
+
+        int totalDarts = Integer.parseInt(args[0]);
+        int k = Integer.parseInt(args[1]);
+        System.err.println("Here");
+
         task curtask = new task();
         curtask.addJarFile("QuickSort.jar");
         AMInfo info = new AMInfo(curtask, null);
-    
-        System.err.println("Reading input...");
-        startTimer();
-        int[] arr = readInput();
-        stopTimer();
-        printArray(arr);
 
-        System.err.println("Forwarding parts to workers...");
+        System.err.println("Distributing work to workers...");
         startTimer();
         channel[] channels = new channel[k];
+        int dartsPerWorker = totalDarts / k;
+
         for (int i = 0; i < k; i++) {
-            int l = arr.length * i / k, r = arr.length * (i + 1) / k;
-            int[] part = Arrays.copyOfRange(arr, l, r);
             point p = info.createPoint();
             channel c = p.createChannel();
+            int[] darts = new int[1];
+            darts[0] = dartsPerWorker;
             p.execute("QuickSort");
-            c.write(part);
+            c.write(darts);
             channels[i] = c;
         }
         stopTimer();
-    
-        System.err.println("Getting results from workers...");
+
+        System.err.println("Collecting results from workers...");
+
         startTimer();
-        int[][] parts = new int[k][];
+        int totalHits = 0;
         for (int i = 0; i < k; i++) {
-            parts[i] = (int[]) channels[i].readObject();
+            int newHints = ((int[]) channels[i].readObject())[0];
+            System.err.println(newHints);
+            totalHits += newHints;
         }
         stopTimer();
+        System.err.println(totalHits);
 
-    
-        System.err.println("Printing result...");
-        startTimer();
-        printArray(parts[0]);
-        stopTimer();
-    
+        double estimatedPi = 4.0 * totalHits / (double) totalDarts;
+        System.out.println("Estimated Pi: " + estimatedPi);
+
         curtask.end();
-    }
-    
-    public static void printArray(int[] arr) {
-        for (int i = 0; i < arr.length; i++) {
-            System.out.print(arr[i] + " ");
-        }
-        System.out.println(); // to move to a new line after printing the array
-    }
-    
-
-    public static int[] readInput() {
-        Scanner scanner = new Scanner(System.in);
-
-        int n = scanner.nextInt();
-        int seed = scanner.nextInt();
-
-        int[] arr = new int[n];
-        Random rng = new Random(seed);
-        for (int i = 0; i < n; i++)
-            arr[i] = Math.abs(rng.nextInt());
-
-        scanner.close();
-
-        return arr;
     }
 
     public void run(AMInfo info) {
-        int[] arr = (int[])info.parent.readObject();
-        quickSort(arr, 0, arr.length - 1);
-        info.parent.write(new int[]{1});
+        int[] dartsPerWorker = (int[]) info.parent.readObject();
+        int[]hits = new int[1];
+        hits[0] = estimateHits(dartsPerWorker[0]);
+        info.parent.write(new int[]{4});
     }
 
+    private int estimateHits(int dartsPerWorker) {
+        Random random = new Random();
+        int hits = 0;
+        for (int i = 0; i < dartsPerWorker; i++) {
+            double x = random.nextDouble() * 2 - 1;
+            double y = random.nextDouble() * 2 - 1;
+            if (x * x + y * y <= 1) {
+                hits++;
+            }
+        }
+        return hits;
+    }
 }
