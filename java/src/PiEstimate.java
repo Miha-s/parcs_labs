@@ -53,9 +53,15 @@ public class PiEstimate implements AM {
     }
 
 
-    public void run(AMInfo info) throws InterruptedException {
+    public void run(AMInfo info)  {
         int[] arr = (int[])info.parent.readObject();
-        Thread.sleep(2000);
+        try {
+            Thread.sleep(2000); // Sleep for 2 seconds (2000 milliseconds)
+        } catch (InterruptedException e) {
+            // Handle the exception
+            System.err.println("Thread interrupted during sleep: " + e.getMessage());
+            Thread.currentThread().interrupt(); // Restore interrupted status.
+        }
         info.parent.write(arr);
     }
 }
