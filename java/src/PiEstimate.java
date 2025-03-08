@@ -1,7 +1,7 @@
 import java.util.Random;
 import parcs.*;
 
-public class ParallelPiEstimation implements AM {
+public class PiEstimate implements AM {
 
     private static long startTime = 0;
 
@@ -18,7 +18,7 @@ public class ParallelPiEstimation implements AM {
 
     public static void main(String[] args) throws Exception {
         if (args.length != 2) {
-            System.err.println("Usage: ParallelPiEstimation <total-darts> <number-of-workers>");
+            System.err.println("Usage: PiEstimate <total-darts> <number-of-workers>");
             System.exit(1);
         }
 
@@ -37,7 +37,7 @@ public class ParallelPiEstimation implements AM {
         for (int i = 0; i < k; i++) {
             point p = info.createPoint();
             channel c = p.createChannel();
-            p.execute("ParallelPiEstimation");
+            p.execute("PiEstimate");
             c.write(dartsPerWorker);
             channels[i] = c;
         }
