@@ -48,6 +48,12 @@ public class QuickSort implements AM {
         stopTimer();
 
         System.err.println("Collecting results from workers...");
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            // Handle the exception (e.g., log it, restore interrupted state)
+            Thread.currentThread().interrupt(); // Recommended practice
+        }
         startTimer();
         int totalHits = 0;
         for (int i = 0; i < k; i++) {
