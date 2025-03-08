@@ -60,3 +60,4 @@ public class QuickSort implements AM {
         int[] arr = (int[])info.parent.readObject();
         info.parent.write(arr);
     }
+}
