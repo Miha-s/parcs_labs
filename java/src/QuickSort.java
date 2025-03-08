@@ -51,7 +51,9 @@ public class QuickSort implements AM {
         startTimer();
         int totalHits = 0;
         for (int i = 0; i < k; i++) {
-            totalHits += ((int[]) channels[i].readObject())[0];
+            int newHints = ((int[]) channels[i].readObject())[0];
+            System.err.println(newHints);
+            totalHits += newHints;
         }
         stopTimer();
         System.err.println(totalHits);
