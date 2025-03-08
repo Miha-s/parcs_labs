@@ -3,7 +3,7 @@ import java.util.*;
 
 import parcs.*;
 
-public class QuickSort implements AM {
+public class PiEstimate implements AM {
     private static long startTime = 0;
 
     public static void startTimer() {
@@ -17,11 +17,11 @@ public class QuickSort implements AM {
         System.err.println("Time passed: " + seconds + " seconds.");
     }
 
-    public static void quickSort(int[] arr, int low, int high) {
+    public static void PiEstimate(int[] arr, int low, int high) {
         if (low < high) {
             int pivotIndex = partition(arr, low, high);
-            quickSort(arr, low, pivotIndex - 1);
-            quickSort(arr, pivotIndex + 1, high);
+            PiEstimate(arr, low, pivotIndex - 1);
+            PiEstimate(arr, pivotIndex + 1, high);
         }
     }
 
@@ -44,13 +44,13 @@ public class QuickSort implements AM {
 
     public static void main(String[] args) throws Exception {
         if (args.length != 1) {
-            System.err.println("Usage: QuickSort <number-of-workers>");
+            System.err.println("Usage: PiEstimate <number-of-workers>");
             System.exit(1);
         }
         int k = Integer.parseInt(args[0]);
     
         task curtask = new task();
-        curtask.addJarFile("QuickSort.jar");
+        curtask.addJarFile("PiEstimate.jar");
         AMInfo info = new AMInfo(curtask, null);
     
         System.err.println("Reading input...");
@@ -66,7 +66,7 @@ public class QuickSort implements AM {
             int[] part = Arrays.copyOfRange(arr, l, r);
             point p = info.createPoint();
             channel c = p.createChannel();
-            p.execute("QuickSort");
+            p.execute("PiEstimate");
             c.write(part);
             channels[i] = c;
         }
@@ -119,7 +119,7 @@ public class QuickSort implements AM {
 
     public void run(AMInfo info) {
         int[] arr = (int[])info.parent.readObject();
-        quickSort(arr, 0, arr.length - 1);
+        PiEstimate(arr, 0, arr.length - 1);
         info.parent.write(arr);
     }
 
