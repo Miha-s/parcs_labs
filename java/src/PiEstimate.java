@@ -3,7 +3,7 @@ import java.util.*;
 
 import parcs.*;
 
-public class PiEstimate implements AM {
+public class QuickSort implements AM {
     private static long startTime = 0;
 
     public static void startTimer() {
@@ -17,11 +17,11 @@ public class PiEstimate implements AM {
         System.err.println("Time passed: " + seconds + " seconds.");
     }
 
-    public static void PiEstimate(int[] arr, int low, int high) {
+    public static void quickSort(int[] arr, int low, int high) {
         if (low < high) {
             int pivotIndex = partition(arr, low, high);
-            PiEstimate(arr, low, pivotIndex - 1);
-            PiEstimate(arr, pivotIndex + 1, high);
+            quickSort(arr, low, pivotIndex - 1);
+            quickSort(arr, pivotIndex + 1, high);
         }
     }
 
@@ -44,13 +44,13 @@ public class PiEstimate implements AM {
 
     public static void main(String[] args) throws Exception {
         if (args.length != 1) {
-            System.err.println("Usage: PiEstimate <number-of-workers>");
+            System.err.println("Usage: QuickSort <number-of-workers>");
             System.exit(1);
         }
         int k = Integer.parseInt(args[0]);
     
         task curtask = new task();
-        curtask.addJarFile("PiEstimate.jar");
+        curtask.addJarFile("QuickSort.jar");
         AMInfo info = new AMInfo(curtask, null);
     
         System.err.println("Reading input...");
@@ -66,7 +66,7 @@ public class PiEstimate implements AM {
             int[] part = Arrays.copyOfRange(arr, l, r);
             point p = info.createPoint();
             channel c = p.createChannel();
-            p.execute("PiEstimate");
+            p.execute("QuickSort");
             c.write(part);
             channels[i] = c;
         }
@@ -115,78 +115,11 @@ public class PiEstimate implements AM {
         scanner.close();
 
         return arr;
-    }import java.io.*;
-import java.util.*;
-
-import parcs.*;
-
-public class PiEstimate implements AM {
-    private static long startTime = 0;
-
-    public static void startTimer() {
-        startTime = System.nanoTime();
     }
-
-    public static void stopTimer() {
-        long endTime = System.nanoTime();
-        long timeElapsed = endTime - startTime;
-        double seconds = timeElapsed / 1_000_000_000.0;
-        System.err.println("Time passed: " + seconds + " seconds.");
-    }
-
-    public static void main(String[] args) throws Exception {
-        if (args.length != 1) {
-            System.err.println("Usage: PiEstimate <number-of-workers>");
-            System.exit(1);
-        }
-        int k = Integer.parseInt(args[0]);
-    
-        task curtask = new task();
-        curtask.addJarFile("PiEstimate.jar");
-        AMInfo info = new AMInfo(curtask, null);
-    
-        System.err.println("Forwarding parts to workers...");
-        startTimer();
-        channel[] channels = new channel[k];
-        for (int i = 0; i < k; i++) {
-            int[] part = {1, 2, 3};
-            point p = info.createPoint();
-            channel c = p.createChannel();
-            p.execute("PiEstimate");
-            c.write(part);
-            channels[i] = c;
-        }
-        stopTimer();
-    
-        System.err.println("Getting results from workers...");
-        startTimer();
-        int[][] parts = new int[k][];
-        for (int i = 0; i < k; i++) {
-            parts[i] = (int[]) channels[i].readObject();
-        }
-        stopTimer();
-    
-        curtask.end();
-    }
-
-
-    public void run(AMInfo info)  {
-        int[] arr = (int[])info.parent.readObject();
-        try {
-            Thread.sleep(2000); // Sleep for 2 seconds (2000 milliseconds)
-        } catch (InterruptedException e) {
-            // Handle the exception
-            System.err.println("Thread interrupted during sleep: " + e.getMessage());
-            Thread.currentThread().interrupt(); // Restore interrupted status.
-        }
-        info.parent.write(arr);
-    }
-}
-
 
     public void run(AMInfo info) {
         int[] arr = (int[])info.parent.readObject();
-        PiEstimate(arr, 0, arr.length - 1);
+        quickSort(arr, 0, arr.length - 1);
         info.parent.write(arr);
     }
 
