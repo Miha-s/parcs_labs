@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 import parcs.*;
 
-public class QuickSort implements AM {
+public class PiEstimation implements AM {
 
     private static long startTime = 0;
 
@@ -19,7 +19,7 @@ public class QuickSort implements AM {
 
     public static void main(String[] args) throws Exception {
         if (args.length != 2) {
-            System.err.println("Usage: QuickSort <total-darts> <number-of-workers>");
+            System.err.println("Usage: PiEstimation <total-darts> <number-of-workers>");
             System.exit(1);
         }
 
@@ -28,7 +28,7 @@ public class QuickSort implements AM {
         System.err.println("Here");
 
         task curtask = new task();
-        curtask.addJarFile("QuickSort.jar");
+        curtask.addJarFile("PiEstimation.jar");
         AMInfo info = new AMInfo(curtask, null);
 
         System.err.println("Distributing work to workers...");
@@ -41,7 +41,7 @@ public class QuickSort implements AM {
             channel c = p.createChannel();
             int[] darts = new int[1];
             darts[0] = dartsPerWorker;
-            p.execute("QuickSort");
+            p.execute("PiEstimation");
             c.write(darts);
             channels[i] = c;
         }
