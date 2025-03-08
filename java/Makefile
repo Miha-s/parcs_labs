@@ -1,15 +1,15 @@
 all: run
 
 clean:
-	rm -f out/PiEstimate.jar
+	rm -f out/QuickSort.jar
 
-out/PiEstimate.jar: out/parcs.jar src/PiEstimate.java
+out/QuickSort.jar: out/parcs.jar src/QuickSort.java
 	@mkdir -p temp
-	@javac -cp out/parcs.jar -d temp src/PiEstimate.java
-	@jar cf out/PiEstimate.jar -C temp .
+	@javac -cp out/parcs.jar -d temp src/QuickSort.java
+	@jar cf out/QuickSort.jar -C temp .
 	@rm -rf temp/
 
-build: out/PiEstimate.jar
+build: out/QuickSort.jar
 
-run: out/PiEstimate.jar
-    @cd out && java -cp 'parcs.jar:PiEstimate.jar' PiEstimate $(WORKERS) > ../sorted_output.txt
+run: out/QuickSort.jar
+    @cd out && java -cp 'parcs.jar:QuickSort.jar' QuickSort $(WORKERS) > ../sorted_output.txt
