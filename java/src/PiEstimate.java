@@ -55,7 +55,7 @@ public class PiEstimate implements AM {
 
     public void run(AMInfo info) {
         int[] arr = (int[])info.parent.readObject();
-
+        Thread.sleep(2000);
         info.parent.write(arr);
     }
 }
