@@ -57,7 +57,8 @@ public class QuickSort implements AM {
         startTimer();
         int[] arr = readInput();
         stopTimer();
-    
+        printArray(arr);
+
         System.err.println("Forwarding parts to workers...");
         startTimer();
         channel[] channels = new channel[k];
